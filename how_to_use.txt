@@ -1,0 +1,47 @@
+How to use Audit
+===========================================
+Scope of audit is to generate a file that you can run in MySQL fin order to modify the target schema for auditing.
+This is accomplish adding triggers for each audited table that will catch the not authorized modifications.
+All the modification will be then saved in a parallel schema that will store all the modified data, in a structure
+that is equal to the original one.
+
+It is possible to run the audit package specifing all the parameters in command line format, or using a configuration file.
+
+audit.pl --defaults-file=/temp/audit/test.ini
+
+audit.pl -u=mysql_user -p=mysql -H=127.0.0.1 -P=5506 -a=root,app_user -i=employees,test -o=/test/audit/employees_13_01_2010.sql
+
+
+To run the check, in order to identify inconsistency use the reportmodification parameter [0 it is not enabled | 1 it is enable]
+
+
+--help, -h
+    Display this help message
+
+--defaults-file File containing all the settings in standard ini format (label = value)
+
+--authorized|a User(s) authorized that will *NOT* be traked
+
+--monitored List of people which WILL be audit (this works ONLY if authorized is blank)
+
+--checked  List of people which WILL be audit with CHECK flag (this works ONLY if authorized is blank)
+
+--host=HOSTNAME, -H=HOSTNAME    Connect to the MySQL server on the given host
+
+--user=USERNAME, -u=USERNAME    The MySQL username to use when connecting to the server
+
+--password=PASSWORD, -p=PASSWORD The password to use when connecting to the server
+
+--port=PORT, -P=PORT  The socket file to use when connecting to the server
+
+--includelist|i comma separated list of databases
+
+--exludelist|x comma separeted list of databases
+
+--outfile=FULLPATH, -o=FULLPATH full path (including file name), containing the whole set of modification to be applied.
+
+--reportmodification perform silent consistency check
+
+The user which connect to the db to run audit, need to have access to all the db to audit and all the audit database created
+and
+grant ALL on security.* to audit@'127.0.0.1' identified by 'mysql' with grant option;
